@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
@@ -30,7 +30,8 @@ const welcomescreen = (props) => {
   const [loading, setLoading] = useState(false);
 
   const lengthFeetInputHandler = (lf) => {
-    setLengthFeet(lf);
+    let numreg = new RegExp(/[0-9]*/gm);
+    if (numreg.test(lf)) setLengthFeet(lf);
   };
   const lengthInchInputHandler = (li) => {
     if (li >= 0 && li <= 12) setLengthInch(li);
@@ -57,6 +58,13 @@ const welcomescreen = (props) => {
     return calculatedVolume;
   };
 
+  let lengthFeetFieldRef = useRef();
+  let lengthInchFieldRef = useRef();
+  let breadthFeetFieldRef = useRef();
+  let breadthInchFieldRef = useRef();
+  let heightFeetFieldRef = useRef();
+  let heightInchFieldRef = useRef();
+
   return (
     <ScrollView style={styles.screen}>
       {Platform.OS === "ios" ? (
@@ -82,10 +90,12 @@ const welcomescreen = (props) => {
               }
               baseColor="rgba(0,0,0,0.8)"
               animationDuration={150}
+              ref={lengthFeetFieldRef}
             />
 
             <TextField
               label="Inches"
+              value={lengthInch}
               onChangeText={lengthInchInputHandler}
               keyboardType="numeric"
               containerStyle={{ width: 100 }}
@@ -104,6 +114,7 @@ const welcomescreen = (props) => {
           <View style={styles.row}>
             <TextField
               label="Feet"
+              value={breadthFeet}
               onChangeText={breadthFeetInputHandler}
               keyboardType="numeric"
               textAlignVertical="center"
@@ -119,6 +130,7 @@ const welcomescreen = (props) => {
 
             <TextField
               label="Inches"
+              value={breadthInch}
               onChangeText={breadthInchInputHandler}
               keyboardType="numeric"
               containerStyle={{ width: 100 }}
@@ -137,6 +149,7 @@ const welcomescreen = (props) => {
           <View style={styles.row}>
             <TextField
               label="Feet"
+              value={heightFeet}
               onChangeText={HeightFeetInputHandler}
               keyboardType="numeric"
               textAlignVertical="center"
@@ -152,6 +165,7 @@ const welcomescreen = (props) => {
 
             <TextField
               label="Inches"
+              value={heightInch}
               onChangeText={HeightInchInputHandler}
               keyboardType="numeric"
               containerStyle={{ width: 100 }}
@@ -207,7 +221,12 @@ const welcomescreen = (props) => {
           <TouchableComp
             style={{ ...styles.calcBtn, backgroundColor: "rgba(255,0,0,0.6)" }}
             onPress={() => {
-              setLengthFeet("");
+              !!lengthFeet && lengthFeetFieldRef.current.clear();
+              !!lengthInch && lengthInchFieldRef.current.clear();
+              !!breadthFeet && breadthFeetFieldRef.current.clear();
+              !!breadthInch && breadthInchFieldRef.current.clear();
+              !!heightFeet && heightFeetFieldRef.current.clear();
+              !!heightInch && heightInchFieldRef.current.clear();
             }}
           >
             {!loading ? (
