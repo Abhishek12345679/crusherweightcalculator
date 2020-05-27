@@ -4,82 +4,221 @@ import {
   Text,
   StyleSheet,
   StatusBar,
-  TextInput,
-  Button,
   ScrollView,
+  TouchableOpacity,
+  Dimensions,
+  ActivityIndicator,
+  Platform,
 } from "react-native";
 
-import Languages from "../constants/Languages";
-import CustomTextInput from "../components/CustomTextInput";
+import { TextField } from "react-native-material-textfield";
+
+import Colors from "../constants/Colors";
 
 const welcomescreen = (props) => {
-  const [length, setLength] = useState();
-  const [breadth, setBreadth] = useState();
-  const [height, setHeight] = useState();
-  const [volume, setVolume] = useState();
+  let [lengthFeet, setLengthFeet] = useState("");
+  let [breadthFeet, setBreadthFeet] = useState("");
+  let [heightFeet, setHeightFeet] = useState("");
+  let [lengthInch, setLengthInch] = useState("");
+  let [breadthInch, setBreadthInch] = useState("");
+  let [heightInch, setHeightInch] = useState("");
+  let calculatedVolume;
 
-  const lengthInputHandler = (length) => {
-    setLength(length);
+  const TouchableComp =
+    Platform.OS === "android" ? TouchableOpacity : TouchableOpacity;
+
+  const [loading, setLoading] = useState(false);
+
+  const lengthFeetInputHandler = (lf) => {
+    setLengthFeet(lf);
   };
-  const breadthInputHandler = (breadth) => {
-    setBreadth(breadth);
+  const lengthInchInputHandler = (li) => {
+    if (li >= 0 && li <= 12) setLengthInch(li);
   };
-  const HeightInputHandler = (height) => {
-    setHeight(height);
+  const breadthFeetInputHandler = (bf) => {
+    setBreadthFeet(bf);
+  };
+  const breadthInchInputHandler = (bi) => {
+    if (bi >= 0 && bi <= 12) setBreadthInch(bi);
+  };
+  const HeightFeetInputHandler = (hf) => {
+    setHeightFeet(hf);
+  };
+  const HeightInchInputHandler = (hi) => {
+    if (hi >= 0 && hi <= 12) setHeightInch(hi);
   };
 
   const volumeCalc = () => {
-    let lengthIntPart = Math.floor(parseFloat(length));
-    let resL = lengthIntPart + (parseFloat(length) - lengthIntPart) / 1.2;
+    calculatedVolume =
+      (parseInt(lengthFeet) * 12 + parseInt(lengthInch)) *
+      (parseInt(breadthFeet) * 12 + parseInt(breadthInch)) *
+      (parseInt(heightFeet) * 12 + parseInt(heightInch));
 
-    let lengthinInches = resL * 12;
-
-    let breadthIntPart = Math.floor(parseFloat(breadth));
-    let resB = breadthIntPart + (parseFloat(breadth) - breadthIntPart) / 1.2;
-
-    let breadthinInches = resB * 12;
-
-    let heightIntPart = Math.floor(parseFloat(height));
-    let resH = heightIntPart + (parseFloat(height) - heightIntPart) / 1.2;
-
-    let heightinInches = resH * 12;
-
-    setVolume(lengthinInches * breadthinInches * heightinInches);
+    return calculatedVolume;
   };
 
   return (
     <ScrollView style={styles.screen}>
-      <StatusBar barStyle="dark-content" />
+      {Platform.OS === "ios" ? (
+        <StatusBar barStyle="dark-content" />
+      ) : (
+        <StatusBar barStyle="light-content" />
+      )}
       <View style={styles.form}>
-        <CustomTextInput
-          placeholder="Length"
-          operatorTimesOperand="x 12"
-          dimensionsInputHandler={lengthInputHandler}
-        />
-        <CustomTextInput
-          placeholder="Breadth"
-          operatorTimesOperand="x 12"
-          dimensionsInputHandler={breadthInputHandler}
-        />
-        <CustomTextInput
-          placeholder="Height"
-          operatorTimesOperand="x 12"
-          dimensionsInputHandler={HeightInputHandler}
-        />
+        <View style={styles.item}>
+          <Text style={styles.inputType}>Length</Text>
+          <View style={styles.row}>
+            <TextField
+              label="Feet"
+              value={lengthFeet}
+              onChangeText={lengthFeetInputHandler}
+              keyboardType="numeric"
+              textAlignVertical="center"
+              containerStyle={{ width: 100 }}
+              labelTextStyle={
+                {
+                  // textAlign: "center",
+                }
+              }
+              baseColor="rgba(0,0,0,0.8)"
+              animationDuration={150}
+            />
 
-        <Button title="calculate" onPress={volumeCalc} />
-        <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-          <Text>Volume :</Text>
-          <Text>{volume} cubic inches </Text>
+            <TextField
+              label="Inches"
+              onChangeText={lengthInchInputHandler}
+              keyboardType="numeric"
+              containerStyle={{ width: 100 }}
+              labelTextStyle={
+                {
+                  // textAlign: "center",
+                }
+              }
+              baseColor="rgba(0,0,0,0.8)"
+              animationDuration={150}
+            />
+          </View>
         </View>
-        <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-          <Text>Volume:</Text>
-          <Text>{volume / 1728} Cb. Feet</Text>
+        <View style={styles.item}>
+          <Text style={styles.inputType}>Width</Text>
+          <View style={styles.row}>
+            <TextField
+              label="Feet"
+              onChangeText={breadthFeetInputHandler}
+              keyboardType="numeric"
+              textAlignVertical="center"
+              containerStyle={{ width: 100 }}
+              labelTextStyle={
+                {
+                  // textAlign: "center",
+                }
+              }
+              baseColor="rgba(0,0,0,0.8)"
+              animationDuration={150}
+            />
+
+            <TextField
+              label="Inches"
+              onChangeText={breadthInchInputHandler}
+              keyboardType="numeric"
+              containerStyle={{ width: 100 }}
+              labelTextStyle={
+                {
+                  // textAlign: "center",
+                }
+              }
+              baseColor="rgba(0,0,0,0.8)"
+              animationDuration={150}
+            />
+          </View>
         </View>
-        <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-          <Text>Weight:</Text>
-          <Text>{volume / 1728 / 25} Metric tonne</Text>
+        <View style={styles.item}>
+          <Text style={styles.inputType}>Height</Text>
+          <View style={styles.row}>
+            <TextField
+              label="Feet"
+              onChangeText={HeightFeetInputHandler}
+              keyboardType="numeric"
+              textAlignVertical="center"
+              containerStyle={{ width: 100 }}
+              labelTextStyle={
+                {
+                  // textAlign: "center",
+                }
+              }
+              baseColor="rgba(0,0,0,0.8)"
+              animationDuration={150}
+            />
+
+            <TextField
+              label="Inches"
+              onChangeText={HeightInchInputHandler}
+              keyboardType="numeric"
+              containerStyle={{ width: 100 }}
+              labelTextStyle={
+                {
+                  // textAlign: "center",
+                }
+              }
+              baseColor="rgba(0,0,0,0.8)"
+              animationDuration={150}
+            />
+          </View>
         </View>
+      </View>
+
+      <View style={{ alignItems: "center" }}>
+        <TouchableComp
+          style={styles.calcBtn}
+          onPress={() => {
+            // setVolume(volumeCalc());
+            calculatedVolume = volumeCalc();
+            setLoading(true);
+            setTimeout(() => {
+              if (calculatedVolume !== undefined) {
+                props.navigation.navigate({
+                  name: "resultscreen",
+                  params: {
+                    length: lengthFeet + "' " + lengthInch + '" ',
+                    volume: calculatedVolume,
+                  },
+                });
+              }
+              setLoading(false);
+            }, 3000);
+          }}
+          disabled={
+            !!!lengthFeet &&
+            !!!breadthFeet &&
+            !!!heightFeet &&
+            !!!lengthInch &&
+            !!!breadthInch &&
+            !!!heightInch
+          }
+        >
+          {!loading ? (
+            <Text style={styles.text}>Calculate</Text>
+          ) : (
+            <ActivityIndicator size="small" color={Colors.white} />
+          )}
+        </TouchableComp>
+
+        <View style={{ alignItems: "center" }}>
+          <TouchableComp
+            style={{ ...styles.calcBtn, backgroundColor: "rgba(255,0,0,0.6)" }}
+            onPress={() => {
+              setLengthFeet("");
+            }}
+          >
+            {!loading ? (
+              <Text style={styles.text}>Clear</Text>
+            ) : (
+              <ActivityIndicator size="small" color={Colors.white} />
+            )}
+          </TouchableComp>
+        </View>
+
+        <View>{/* <Flatlist /> */}</View>
       </View>
     </ScrollView>
   );
@@ -88,20 +227,54 @@ const welcomescreen = (props) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    backgroundColor: Colors.white,
   },
   text: {
     fontSize: 20,
     fontFamily: "apple-bold",
+    color: Colors.white,
   },
   form: {
+    marginHorizontal: 16,
+    marginTop: 8,
     flex: 1,
-    paddingHorizontal: 40,
-    marginTop: 10,
   },
   row: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+  },
+  calcBtn: {
+    width: Dimensions.get("window").width - 20,
+    height: 60,
+    backgroundColor: Colors.green,
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 10,
+    shadowOpacity: 0.4,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowRadius: 3,
+    borderRadius: 5,
+  },
+  inputType: {
+    fontFamily: "apple-bold",
+    fontSize: 20,
+  },
+  item: {
+    backgroundColor: "#ccc",
+    padding: 15,
+    borderRadius: 5,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
+    marginVertical: 5,
   },
 });
 

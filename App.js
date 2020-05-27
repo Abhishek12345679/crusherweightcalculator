@@ -6,7 +6,18 @@ import * as Fonts from "expo-font";
 
 import NavigatorContainer from "./navigation/NavigatorContainer";
 
+import { init } from "./helpers/db";
+
 export default function App() {
+  // init()
+  //   .then(() => {
+  //     console.log("initialised array");
+  //   })
+  //   .catch((err) => {
+  //     console.log("db initialization failed");
+  //     console.log(err);
+  //   });
+
   const [fontLoaded, setFontLoaded] = useState();
 
   const fetchFonts = () => {
