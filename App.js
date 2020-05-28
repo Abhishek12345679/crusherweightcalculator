@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
 
 import { AppLoading } from "expo";
 import * as Fonts from "expo-font";
@@ -8,17 +7,29 @@ import NavigatorContainer from "./navigation/NavigatorContainer";
 
 import { init } from "./helpers/db";
 
+import { combineReducers, applyMiddleware, createStore } from "redux";
+import ReduxThunk from "redux-thunk";
+import { Provider } from "react-redux";
+
+import historyReducer from "./store/reducers";
+
 export default function App() {
-  // init()
-  //   .then(() => {
-  //     console.log("initialised array");
-  //   })
-  //   .catch((err) => {
-  //     console.log("db initialization failed");
-  //     console.log(err);
-  //   });
+  init()
+    .then(() => {
+      console.log("initialised array");
+    })
+    .catch((err) => {
+      console.log("db initialization failed");
+      console.log(err);
+    });
 
   const [fontLoaded, setFontLoaded] = useState();
+
+  const rootReducer = combineReducers({
+    history: historyReducer,
+  });
+
+  const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
   const fetchFonts = () => {
     return Fonts.loadAsync({
@@ -37,12 +48,9 @@ export default function App() {
       />
     );
   }
-  return <NavigatorContainer />;
+  return (
+    <Provider store={store}>
+      <NavigatorContainer />
+    </Provider>
+  );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-});

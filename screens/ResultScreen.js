@@ -1,17 +1,11 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-} from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import Colors from "../constants/Colors";
+import { useSelector } from "react-redux";
 
 // import {} from '../helpers/db'
 
 const ResultScreen = (props) => {
-  const volume = props.route.params.volume;
-  const length = props.route.params.length;
 
   const results = [
     {

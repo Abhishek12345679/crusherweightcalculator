@@ -6,7 +6,7 @@ export const init = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS history (id INTEGER PRIMARY KEY NON NULL, name TEXT NON NULL, length REAL NON NULL, breadth REAL NON NULL, height REAL NON NULL,cft REAL NON NULL, weight REAL NON NULL);",
+        "CREATE TABLE IF NOT EXISTS history (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL, length REAL NOT NULL, breadth REAL NOT NULL, height REAL NOT NULL, cft REAL NOT NULL, weight REAL NOT NULL);",
         [],
         () => {
           resolve();

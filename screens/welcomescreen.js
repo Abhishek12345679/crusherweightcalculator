@@ -9,20 +9,26 @@ import {
   Dimensions,
   ActivityIndicator,
   Platform,
+  TouchableNativeFeedback,
 } from "react-native";
+
+import { useDispatch } from "react-redux";
+import * as HistoryActions from "../store/actions";
 
 import { TextField } from "react-native-material-textfield";
 
 import Colors from "../constants/Colors";
 
 const welcomescreen = (props) => {
-  let [lengthFeet, setLengthFeet] = useState("");
-  let [breadthFeet, setBreadthFeet] = useState("");
-  let [heightFeet, setHeightFeet] = useState("");
-  let [lengthInch, setLengthInch] = useState("");
-  let [breadthInch, setBreadthInch] = useState("");
-  let [heightInch, setHeightInch] = useState("");
-  let calculatedVolume;
+  const dispatch = useDispatch();
+
+  let [lengthFeet, setLengthFeet] = useState();
+  let [breadthFeet, setBreadthFeet] = useState();
+  let [heightFeet, setHeightFeet] = useState();
+  let [lengthInch, setLengthInch] = useState();
+  let [breadthInch, setBreadthInch] = useState();
+  let [heightInch, setHeightInch] = useState();
+  let [volume, setVolume] = useState();
 
   const TouchableComp =
     Platform.OS === "android" ? TouchableOpacity : TouchableOpacity;
@@ -55,7 +61,7 @@ const welcomescreen = (props) => {
       (parseInt(breadthFeet) * 12 + parseInt(breadthInch)) *
       (parseInt(heightFeet) * 12 + parseInt(heightInch));
 
-    return calculatedVolume;
+    setVolume(calculatedVolume);
   };
 
   let lengthFeetFieldRef = useRef();
@@ -106,6 +112,7 @@ const welcomescreen = (props) => {
               }
               baseColor="rgba(0,0,0,0.8)"
               animationDuration={150}
+              ref={lengthInchFieldRef}
             />
           </View>
         </View>
@@ -126,6 +133,7 @@ const welcomescreen = (props) => {
               }
               baseColor="rgba(0,0,0,0.8)"
               animationDuration={150}
+              ref={breadthFeetFieldRef}
             />
 
             <TextField
@@ -141,6 +149,7 @@ const welcomescreen = (props) => {
               }
               baseColor="rgba(0,0,0,0.8)"
               animationDuration={150}
+              ref={breadthInchFieldRef}
             />
           </View>
         </View>
@@ -161,6 +170,7 @@ const welcomescreen = (props) => {
               }
               baseColor="rgba(0,0,0,0.8)"
               animationDuration={150}
+              ref={heightFeetFieldRef}
             />
 
             <TextField
@@ -176,6 +186,7 @@ const welcomescreen = (props) => {
               }
               baseColor="rgba(0,0,0,0.8)"
               animationDuration={150}
+              ref={heightInchFieldRef}
             />
           </View>
         </View>
@@ -185,8 +196,18 @@ const welcomescreen = (props) => {
         <TouchableComp
           style={styles.calcBtn}
           onPress={() => {
-            // setVolume(volumeCalc());
-            calculatedVolume = volumeCalc();
+            volumeCalc();
+            dispatch(
+              HistoryActions.addEntry(
+                "Abhishek",
+                lengthFeet + "' " + lengthInch + '" ',
+                breadthFeet + "' " + breadthInch + '" ',
+                heightFeet + "' " + heightInch + '" ',
+                volume,
+                volume / 1728,
+                volume / 1728 / 25
+              )
+            );
             setLoading(true);
             setTimeout(() => {
               if (calculatedVolume !== undefined) {
@@ -229,15 +250,9 @@ const welcomescreen = (props) => {
               !!heightInch && heightInchFieldRef.current.clear();
             }}
           >
-            {!loading ? (
-              <Text style={styles.text}>Clear</Text>
-            ) : (
-              <ActivityIndicator size="small" color={Colors.white} />
-            )}
+            <Text>Clear</Text>
           </TouchableComp>
         </View>
-
-        <View>{/* <Flatlist /> */}</View>
       </View>
     </ScrollView>
   );
