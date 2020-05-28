@@ -1,7 +1,6 @@
 class entry {
-    constructor(id, name, length, breadth, height, volume, cft, weight) {
+    constructor(id, length, breadth, height, volume, cft, weight) {
         (this.id = id),
-        (this.name = name),
         (this.length = length),
         (this.breadth = breadth),
         (this.height = height),

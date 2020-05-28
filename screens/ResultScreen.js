@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList, Dimensions } from "react-native";
 import Colors from "../constants/Colors";
 
 import { useSelector } from "react-redux";
@@ -19,14 +19,77 @@ const ResultScreen = (props) => {
   return (
     <View style={styles.screen}>
       <FlatList
+        maxToRenderPerBatch={2}
         keyExtractor={(item) => item.id}
         data={results}
         renderItem={(itemData) => (
-          <View style={{ flexDirection: "column" }}>
-            <View style={styles.listitem}>
-              <View>
-                <Text style={styles.titleText}>{itemData.item.volume}</Text>
-                <Text style={styles.valueText}>{itemData.item.cft}</Text>
+          <View style={styles.listitem}>
+            <View>
+              <View
+                style={{
+                  flexDirection: "column",
+                  justifyContent: "space-around",
+                  marginTop: 5,
+                }}
+              >
+                <Text style={styles.titleText}>Length</Text>
+                <Text style={styles.valueText}>{itemData.item.length}</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "column",
+                  justifyContent: "space-around",
+                  marginTop: 5,
+                }}
+              >
+                <Text style={styles.titleText}>Breadth</Text>
+                <Text style={styles.valueText}>{itemData.item.breadth}</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "column",
+                  justifyContent: "space-around",
+                  marginTop: 5,
+                }}
+              >
+                <Text style={styles.titleText}>Height</Text>
+                <Text style={styles.valueText}>{itemData.item.height}</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "column",
+                  justifyContent: "space-around",
+                  marginTop: 5,
+                }}
+              >
+                <Text style={styles.titleText}>Volume</Text>
+                <Text style={styles.valueText}>
+                  {itemData.item.volume} Cubic Inches
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "column",
+                  justifyContent: "space-around",
+                  marginTop: 5,
+                }}
+              >
+                <Text style={styles.titleText}>CFT</Text>
+                <Text style={styles.valueText}>
+                  {itemData.item.cft.toFixed(3)} CFT
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "column",
+                  justifyContent: "space-around",
+                  marginTop: 5,
+                }}
+              >
+                <Text style={styles.titleText}>Weight</Text>
+                <Text style={styles.valueText}>
+                  {itemData.item.weight.toFixed(3)} tonne
+                </Text>
               </View>
             </View>
           </View>
@@ -40,36 +103,32 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: "#fff",
+    alignItems: "center",
   },
   listitem: {
-    width: "100%",
-    height: 50,
-    borderBottomWidth: 0.5,
-    marginVertical: 7,
-    paddingHorizontal: 10,
+    width: Dimensions.get("window").width - 20,
+    height: 350,
+    margin: 7,
+    padding: 10,
+    backgroundColor: "#ccc",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.5,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowRadius: 4,
   },
   titleText: {
-    fontFamily: "apple-regular",
+    fontFamily: "apple-bold",
     fontSize: 17,
     marginBottom: 7,
   },
   valueText: {
     fontFamily: "apple-regular",
     fontSize: 15,
-    color: "#a9a9a9",
-  },
-  expandableViewStyle: {
-    width: "100%",
-    height: 100,
-    borderBottomWidth: 0.5,
-    marginVertical: 7,
-    paddingHorizontal: 10,
-  },
-  bigValueText: {
-    fontFamily: "apple-regular",
-    fontSize: 27,
-    color: "#a9a9a9",
-    marginTop: 15,
+    color: "rgba(0,0,0,0.5)",
   },
 });
 

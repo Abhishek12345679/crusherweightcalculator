@@ -4,7 +4,7 @@ export const SET_HISTORY = "LOAD_HISTORY";
 import { createEntry, loadHistory } from "../helpers/db";
 
 export const setHistory = () => {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     try {
       const history = await loadHistory();
       console.log(history);
@@ -16,7 +16,7 @@ export const setHistory = () => {
 };
 
 export const addEntry = (length, breadth, height, volume, cft, weight) => {
-  return async (getState, dispatch) => {
+  return async ( dispatch) => {
     try {
       const dbResponse = await createEntry(
         length,
@@ -35,7 +35,7 @@ export const addEntry = (length, breadth, height, volume, cft, weight) => {
           breadth: breadth,
           height: height,
           volume: volume,
-          cft: fetch,
+          cft: cft,
           weight: weight,
         },
       });

@@ -21,9 +21,6 @@ import Colors from "../constants/Colors";
 
 const welcomescreen = (props) => {
   const dispatch = useDispatch();
-
-
-
   let [lengthFeet, setLengthFeet] = useState();
   let [breadthFeet, setBreadthFeet] = useState();
   let [heightFeet, setHeightFeet] = useState();
@@ -44,28 +41,28 @@ const welcomescreen = (props) => {
     if (numreg.test(lf)) setLengthFeet(lf);
   };
   const lengthInchInputHandler = (li) => {
-    if (li >= 0 && li <= 12) setLengthInch(li);
+    setLengthInch(li);
   };
   const breadthFeetInputHandler = (bf) => {
     setBreadthFeet(bf);
   };
   const breadthInchInputHandler = (bi) => {
-    if (bi >= 0 && bi <= 12) setBreadthInch(bi);
+    setBreadthInch(bi);
   };
   const HeightFeetInputHandler = (hf) => {
     setHeightFeet(hf);
   };
   const HeightInchInputHandler = (hi) => {
-    if (hi >= 0 && hi <= 12) setHeightInch(hi);
+    setHeightInch(hi);
   };
 
   const volumeCalc = () => {
-    calculatedVolume =
+    let volume =
       (parseInt(lengthFeet) * 12 + parseInt(lengthInch)) *
       (parseInt(breadthFeet) * 12 + parseInt(breadthInch)) *
       (parseInt(heightFeet) * 12 + parseInt(heightInch));
 
-    return calculatedVolume;
+    return volume;
   };
 
   let lengthFeetFieldRef = useRef();
@@ -201,6 +198,7 @@ const welcomescreen = (props) => {
           style={styles.calcBtn}
           onPress={() => {
             calculatedVolume = volumeCalc();
+            console.log("volume:", calculatedVolume);
             dispatch(
               HistoryActions.addEntry(
                 lengthFeet + "' " + lengthInch + '" ',
@@ -208,7 +206,10 @@ const welcomescreen = (props) => {
                 heightFeet + "' " + heightInch + '" ',
                 calculatedVolume,
                 calculatedVolume / 1728,
-                calculatedVolume / 1728 / 25
+                calculatedVolume / 43200
+                // "volume",
+                // "cft",
+                // "weight"
               )
             );
             setLoading(true);

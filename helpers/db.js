@@ -1,12 +1,12 @@
 import * as SQLite from "expo-sqlite";
 
-const db = SQLite.openDatabase("entryhistory.db");
+const db = SQLite.openDatabase("recordHistory.db");
 
 export const init = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS entryhistory (id INTEGER PRIMARY KEY NOT NULL, length REAL NOT NULL, breadth REAL NOT NULL, height REAL NOT NULL, cft REAL NOT NULL, weight REAL NOT NULL);",
+        "CREATE TABLE IF NOT EXISTS recordHistory (id INTEGER PRIMARY KEY NOT NULL, length REAL NOT NULL, breadth REAL NOT NULL, height REAL NOT NULL, volume REAL NOT NULL, cft REAL NOT NULL, weight REAL NOT NULL);",
         [],
         () => {
           resolve();
@@ -20,12 +20,12 @@ export const init = () => {
   return promise;
 };
 
-export const createEntry = (length, breadth, height, cft, weight) => {
+export const createEntry = (length, breadth, height, volume, cft, weight) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "INSERT INTO entryhistory (length, breadth, height, cft, weight) VALUES(?, ?, ?, ?, ?);",
-        [length, breadth, height, cft, weight],
+        "INSERT INTO recordHistory (length, breadth, height, volume, cft, weight) VALUES(?, ?, ?, ?, ?, ?);",
+        [length, breadth, height, volume, cft, weight],
         (_, result) => {
           resolve(result);
         },
@@ -42,7 +42,7 @@ export const loadHistory = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "SELECT * FROM entryhistory",
+        "SELECT * FROM recordHistory",
         [],
         (_, result) => {
           resolve(result);
