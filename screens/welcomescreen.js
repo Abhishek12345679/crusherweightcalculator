@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   View,
   Text,
@@ -22,13 +22,17 @@ import Colors from "../constants/Colors";
 const welcomescreen = (props) => {
   const dispatch = useDispatch();
 
+
+
   let [lengthFeet, setLengthFeet] = useState();
   let [breadthFeet, setBreadthFeet] = useState();
   let [heightFeet, setHeightFeet] = useState();
   let [lengthInch, setLengthInch] = useState();
   let [breadthInch, setBreadthInch] = useState();
   let [heightInch, setHeightInch] = useState();
-  let [volume, setVolume] = useState();
+  // let [volume, setVolume] = useState();
+
+  let calculatedVolume;
 
   const TouchableComp =
     Platform.OS === "android" ? TouchableOpacity : TouchableOpacity;
@@ -61,7 +65,7 @@ const welcomescreen = (props) => {
       (parseInt(breadthFeet) * 12 + parseInt(breadthInch)) *
       (parseInt(heightFeet) * 12 + parseInt(heightInch));
 
-    setVolume(calculatedVolume);
+    return calculatedVolume;
   };
 
   let lengthFeetFieldRef = useRef();
@@ -196,29 +200,22 @@ const welcomescreen = (props) => {
         <TouchableComp
           style={styles.calcBtn}
           onPress={() => {
-            volumeCalc();
+            calculatedVolume = volumeCalc();
             dispatch(
               HistoryActions.addEntry(
-                "Abhishek",
                 lengthFeet + "' " + lengthInch + '" ',
                 breadthFeet + "' " + breadthInch + '" ',
                 heightFeet + "' " + heightInch + '" ',
-                volume,
-                volume / 1728,
-                volume / 1728 / 25
+                calculatedVolume,
+                calculatedVolume / 1728,
+                calculatedVolume / 1728 / 25
               )
             );
             setLoading(true);
             setTimeout(() => {
-              if (calculatedVolume !== undefined) {
-                props.navigation.navigate({
-                  name: "resultscreen",
-                  params: {
-                    length: lengthFeet + "' " + lengthInch + '" ',
-                    volume: calculatedVolume,
-                  },
-                });
-              }
+              props.navigation.navigate({
+                name: "resultscreen",
+              });
               setLoading(false);
             }, 3000);
           }}

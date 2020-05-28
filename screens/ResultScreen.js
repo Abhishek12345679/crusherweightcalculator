@@ -1,21 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import Colors from "../constants/Colors";
+
 import { useSelector } from "react-redux";
 
-// import {} from '../helpers/db'
+import { useDispatch } from "react-redux";
+import * as HistoryActions from "../store/actions";
 
 const ResultScreen = (props) => {
+  const dispatch = useDispatch();
+  const results = useSelector((state) => state.history.history);
+  console.log(results);
 
-  const results = [
-    {
-      id: "1",
-      CFT: "CFT",
-      cft: (volume / 1728).toFixed(2) + " CFT",
-      Weight: "Weight",
-      weight: (volume / 1728 / 25).toFixed(2) + " Mt.Tonne",
-    },
-  ];
+  useEffect(() => {
+    dispatch(HistoryActions.setHistory());
+  }, [dispatch]);
 
   return (
     <View style={styles.screen}>
@@ -26,14 +25,8 @@ const ResultScreen = (props) => {
           <View style={{ flexDirection: "column" }}>
             <View style={styles.listitem}>
               <View>
-                <Text style={styles.titleText}>{itemData.item.CFT}</Text>
+                <Text style={styles.titleText}>{itemData.item.volume}</Text>
                 <Text style={styles.valueText}>{itemData.item.cft}</Text>
-              </View>
-            </View>
-            <View style={styles.listitem}>
-              <View>
-                <Text style={styles.titleText}>{itemData.item.Weight}</Text>
-                <Text style={styles.valueText}>{itemData.item.weight}</Text>
               </View>
             </View>
           </View>

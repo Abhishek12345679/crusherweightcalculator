@@ -1,4 +1,4 @@
-import { ADD_ENTRY } from "./actions";
+import { ADD_ENTRY, SET_HISTORY } from "./actions";
 import entry from "../models/entry";
 
 const initialState = {
@@ -7,10 +7,25 @@ const initialState = {
 
 const historyReducer = (state = initialState, action) => {
   switch (action.type) {
+    case SET_HISTORY:
+      return {
+        ...state,
+        history: action.history.map(
+          (e) =>
+            new entry(
+              e.id.toString(),
+              e.length,
+              e.breadth,
+              e.height,
+              e.volume,
+              e.cft,
+              e.weight
+            )
+        ),
+      };
     case ADD_ENTRY:
       const newEntry = new entry(
         action.entry.id.toString(),
-        action.entry.name,
         action.entry.length,
         action.entry.breadth,
         action.entry.height,
